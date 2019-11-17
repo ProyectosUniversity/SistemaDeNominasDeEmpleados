@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AFP.cs" />
+    <Compile Include="Boleta.cs" />
+    <Compile Include="ConceptoDePago.cs" />
     <Compile Include="Contrato.cs" />
     <Compile Include="Empleado.cs" />
     <Compile Include="Periodo.cs" />
