@@ -119,6 +119,7 @@ if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Pag
 Begin
     create table Pagos.AFP
     (CodigoAFP Codigo,
+	NombreAFP varchar(50),
 	PorcentajeDeDescuento Calculo default 0,
 	constraint CodigoAFPPK primary key  (CodigoAFP)
     )on  PagosEsquemaParticion  (CodigoAFP)
@@ -136,23 +137,21 @@ Begin
 	 AsignacionFamiliar char(2) not null,
 	 TotalDeHorasContratadasPorSemanas Calculo,
 	 ValorHora Calculo,
+	 Estado varchar(10),
 	 CodigoEmpleado Codigo,
 	 CodigoAFP Codigo,
+	 codigoPeriodo Codigo,
 	 constraint AsignacionFamiliarCK check(AsignacionFamiliar='Si' or AsignacionFamiliar='No'),
 	 constraint FechaInicioCK check (FechaInicio < FechaFin),
 	 constraint FechaFinCK check (FechaFin > FechaInicio),
 	 constraint TotalDeHorasContratadasPorSemanasCK check (TotalDeHorasContratadasPorSemanas >= 8 or TotalDeHorasContratadasPorSemanas <= 40),
+	 constraint EstadoCheck check (Estado='Vigente' or Estado='Anulado'),
 	 constraint CodigoContratoPK primary key  (CodigoContrato),
 	 constraint CodigoEmpleadoFK foreign key (CodigoEmpleado) references Contratos.Empleado(CodigoEmpleado),
-	 constraint CodigoAFPFK foreign key (CodigoAFP) references Pagos.AFP(CodigoAFP)
+	 constraint CodigoAFPFK foreign key (CodigoAFP) references Pagos.AFP(CodigoAFP),
+	 constraint CodigoPeriodoFK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo)
      )on  ContratosEsquemaParticion(CodigoContrato)
 end
-go
-
-alter table  Contratos.Contrato add Estado varchar(10) default 'Vigente'
-go
-
-alter table Contratos.Contrato add constraint EstadoCheck check (Estado='Vigente' or Estado='Anulado')
 go
 
 
@@ -166,30 +165,9 @@ Begin
      Estado nchar(1) not null,
 	 constraint FechaInicio_CK check (FechaInicio < FechaFin),
 	 constraint FechaFin_CK check (FechaFin > FechaInicio),
-	 constraint EstadoCK check (Estado='Activo' or Estado='Inactivo'),
+	 constraint EstadoCK check (Estado='activo' or Estado='inactivo'),
 	 constraint CodigoPeriodoPK primary key  (CodigoPeriodo)
      )on  ContratosEsquemaParticion(CodigoPeriodo)
-end
-go
-
-
---TABLA BOLETA
-if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Pagos' and TABLE_NAME='Boleta' )
-Begin
-    create table Pagos.Boleta
-    (CodigoBoleta  Codigo,
-     TotalDeIngresos Calculo default 0,
-     TotalDeDescuento Calculo default 0,
-     TotalDeHoras Calculo default 0,
-	 SueldoNeto Calculo default 0,
-	 AsginacionFamiliar Calculo default 0,
-	 DescuentoPorAFP Calculo default 0,
-	 FechaPago Date,
-	 Codigo_ConceptoDePago Codigo,
-	 CodigoContrato Codigo
-	 constraint CodigoBoletaPK primary key  (CodigoBoleta),
-	 constraint CodigoContratoFK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato)
-     )on  PagosEsquemaParticion(CodigoBoleta)
 end
 go
 
@@ -198,9 +176,13 @@ if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Pag
 Begin
     create table Pagos.ConceptoDePago
     (CodigoConceptoDePago  Codigo,
-     SumaDeIngresos Calculo default 0,
-	 SumaDeDescuentos Calculo default 0,
-	 Codigo_ConceptoDePago Codigo,
+	 MontoPorHorasExtra Calculo,
+	 MontoPorReintegros Calculo,
+	 MontoDeOtrosIngresos Calculo,
+	 MontoPorAdelantos Calculo,
+	 MontoDeOtrosDescuentos Calculo,
+     SumaDeConceptosDeIngresos Calculo default 0,
+	 SumaDeConceptosDeDescuentos Calculo default 0,
 	 CodigoPeriodo Codigo
 	 constraint CodigoConceptoDePagoPK primary key  (CodigoConceptoDePago),
 	 constraint CodigoPeriodoFK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo)
@@ -208,7 +190,28 @@ Begin
 end
 go
 
-
+--TABLA BOLETA
+if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Pagos' and TABLE_NAME='Boleta' )
+Begin
+    create table Pagos.Boleta
+    (CodigoBoleta  Codigo,
+	 FechaPago Date,
+	 SueldoBasico Calculo default 0,
+	 AsignacionFamiliar Calculo default 0,
+     TotalDeIngresos Calculo default 0,
+	 DescuentoPorAFP Calculo default 0,
+     TotalDeDescuentos Calculo default 0,
+	 SueldoNeto Calculo default 0,
+     TotalDeHoras Calculo default 0,
+	 CodigoContrato Codigo,
+	 CodigoPeriodo Codigo,
+	 CodigoConceptoDePago Codigo,
+	 constraint CodigoBoletaPK primary key  (CodigoBoleta),
+	 constraint CodigoContratoFK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato),
+	 constraint CodigoPeriodo_FK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo)
+     )on  PagosEsquemaParticion(CodigoBoleta)
+end
+go
 
 -------- SECUENCIAS PARA LOS CODIGOS ------
 
@@ -406,7 +409,11 @@ go
 go 
 
 
+--Mostrar Datos del Periodo
+select P.FechaInicio as "Fecha Inicio" ,P.FechaFin as "Fecha Fin" from Contratos.Periodo as P 
 
+--Mostrar Contratos del Periodo
+select (select C.CodigoEmpleado from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Codigo Empleado",(select E.Nombre from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "Codigo Empleado",(select E.DNIEmpleado from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "DNI",B.TotalDeHoras as "Total de Horas",(select C.ValorHora from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Valor Hora",B.SueldoBasico as "Sueldo Basico",B.TotalDeIngresos as "Total de Ingresos",B.TotalDeDescuentos as "Total de Descuentos",B.SueldoNeto as "Sueldo Neto"from Pagos.Boleta as B where B.CodigoBoleta ='1'
 
 --INSERCIONES--
 
@@ -423,7 +430,7 @@ go
  --Editar Contrato
    exec Contratos.spEditarContrato 1,'2019-10-24','2020-05-15','Empleado','Si',30,8,1,1
 
-  
+  insert into Contratos.Periodo values(next value for SecPeriodo ,'2019-11-15','2020-11-15','activo')
 go
 
 
