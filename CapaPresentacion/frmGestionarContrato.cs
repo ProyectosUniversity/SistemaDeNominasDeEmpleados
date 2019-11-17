@@ -193,9 +193,6 @@ namespace CapaPresentacion
             }
         }
 
-        private void btnVer_Click(object sender, EventArgs e)
-        {
-            lbVer.Text = dtContratos.CurrentRow.Cells[9].Value.ToString();
-        }
+        
     }
 }

@@ -51,8 +51,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.lbVer = new System.Windows.Forms.Label();
-            this.btnVer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dtContratos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -271,32 +269,11 @@
             this.label6.TabIndex = 21;
             this.label6.Text = "Nombre:";
             // 
-            // lbVer
-            // 
-            this.lbVer.AutoSize = true;
-            this.lbVer.Location = new System.Drawing.Point(650, 42);
-            this.lbVer.Name = "lbVer";
-            this.lbVer.Size = new System.Drawing.Size(35, 13);
-            this.lbVer.TabIndex = 27;
-            this.lbVer.Text = "label7";
-            // 
-            // btnVer
-            // 
-            this.btnVer.Location = new System.Drawing.Point(609, 71);
-            this.btnVer.Name = "btnVer";
-            this.btnVer.Size = new System.Drawing.Size(75, 23);
-            this.btnVer.TabIndex = 28;
-            this.btnVer.Text = "button1";
-            this.btnVer.UseVisualStyleBackColor = true;
-            this.btnVer.Click += new System.EventHandler(this.btnVer_Click);
-            // 
             // frmGestionarContrato
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1160, 581);
-            this.Controls.Add(this.btnVer);
-            this.Controls.Add(this.lbVer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -345,7 +322,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label lbVer;
-        private System.Windows.Forms.Button btnVer;
     }
 }
