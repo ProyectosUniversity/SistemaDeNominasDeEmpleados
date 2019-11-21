@@ -38,5 +38,10 @@ namespace CapaPresentacion
         {
             openChildForm(new frmGestionarContrato());
         }
+
+        private void btnProcesarPagos_Click(object sender, EventArgs e)
+        {
+            openChildForm(new frmProcesarPagos());
+        }
     }
 }

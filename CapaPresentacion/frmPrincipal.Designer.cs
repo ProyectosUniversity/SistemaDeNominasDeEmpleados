@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.pnlOpciones = new System.Windows.Forms.Panel();
+            this.btnProcesarPagos = new System.Windows.Forms.Button();
             this.btnGestionarContrato = new System.Windows.Forms.Button();
             this.pnlBanner = new System.Windows.Forms.Panel();
             this.pnlContenido = new System.Windows.Forms.Panel();
-            this.btnProcesarPagos = new System.Windows.Forms.Button();
             this.pnlOpciones.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +46,19 @@
             this.pnlOpciones.Name = "pnlOpciones";
             this.pnlOpciones.Size = new System.Drawing.Size(200, 450);
             this.pnlOpciones.TabIndex = 0;
+            // 
+            // btnProcesarPagos
+            // 
+            this.btnProcesarPagos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnProcesarPagos.FlatAppearance.BorderSize = 0;
+            this.btnProcesarPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProcesarPagos.Location = new System.Drawing.Point(0, 162);
+            this.btnProcesarPagos.Name = "btnProcesarPagos";
+            this.btnProcesarPagos.Size = new System.Drawing.Size(200, 44);
+            this.btnProcesarPagos.TabIndex = 1;
+            this.btnProcesarPagos.Text = "Procesar Pagos";
+            this.btnProcesarPagos.UseVisualStyleBackColor = true;
+            this.btnProcesarPagos.Click += new System.EventHandler(this.btnProcesarPagos_Click);
             // 
             // btnGestionarContrato
             // 
@@ -75,18 +88,6 @@
             this.pnlContenido.Name = "pnlContenido";
             this.pnlContenido.Size = new System.Drawing.Size(600, 450);
             this.pnlContenido.TabIndex = 1;
-            // 
-            // btnProcesarPagos
-            // 
-            this.btnProcesarPagos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnProcesarPagos.FlatAppearance.BorderSize = 0;
-            this.btnProcesarPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnProcesarPagos.Location = new System.Drawing.Point(0, 162);
-            this.btnProcesarPagos.Name = "btnProcesarPagos";
-            this.btnProcesarPagos.Size = new System.Drawing.Size(200, 44);
-            this.btnProcesarPagos.TabIndex = 1;
-            this.btnProcesarPagos.Text = "Procesar Pagos";
-            this.btnProcesarPagos.UseVisualStyleBackColor = true;
             // 
             // frmPrincipal
             // 

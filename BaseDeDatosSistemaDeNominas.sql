@@ -179,6 +179,7 @@ Begin
 	 MontoPorHorasExtra Calculo,
 	 MontoPorReintegros Calculo,
 	 MontoDeOtrosIngresos Calculo,
+	 MontoPorHorasAusentes Calculo,
 	 MontoPorAdelantos Calculo,
 	 MontoDeOtrosDescuentos Calculo,
      SumaDeConceptosDeIngresos Calculo default 0,
@@ -208,11 +209,11 @@ Begin
 	 CodigoConceptoDePago Codigo,
 	 constraint CodigoBoletaPK primary key  (CodigoBoleta),
 	 constraint CodigoContratoFK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato),
-	 constraint CodigoPeriodo_FK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo)
+	 constraint CodigoPeriodo_FK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo),
+	 constraint CodigoConceptoDePago_FK foreign key (CodigoConceptoDePago) references Pagos.ConceptoDePago(CodigoConceptoDePago)
      )on  PagosEsquemaParticion(CodigoBoleta)
 end
 go
-
 -------- SECUENCIAS PARA LOS CODIGOS ------
 
 --Secuencia para Empleado
@@ -410,11 +411,63 @@ go
 
 
 --Mostrar Datos del Periodo
-select P.FechaInicio as "Fecha Inicio" ,P.FechaFin as "Fecha Fin" from Contratos.Periodo as P 
+create procedure Contratos.MostrarPeriodo
+as
+select P.FechaInicio as "Fecha Inicio" ,P.FechaFin as "Fecha Fin" from Contratos.Periodo as P where  P.CodigoPeriodo='1'
+go
+exec Contratos.MostrarPeriodo
+select * from Pagos.ConceptoDePago
+go
 
---Mostrar Contratos del Periodo
+--Crear Boleta
+if not exists (select * from sys.procedures where name='Pagos.spGuardarConceptosDePago')
+  Begin
+    exec('create procedure Pagos.spGuardarConceptosDePago
+@MontoPorHorasExtra numeric(9,2),
+@MontoPorPorReintegros numeric(9,2),
+@MontoDeOtrosIngresos numeric(9,2),
+@MontoPorHorasAusentes numeric(9,2),
+@MontoPorAdelantos numeric(9,2),
+@MontoDeOtrosDescuentos numeric(9,2),
+@SumaDeConceptosDeIngresos numeric(9,2),
+@SumaDeConceptosDeDescuentos numeric(9,2),
+@CodigoPeriodo nchar(6)
+as
+insert into Pagos.ConceptoDePago values (next value for Pagos.SecConceptoDePago,@MontoPorHorasExtra,@MontoPorPorReintegros,@MontoDeOtrosIngresos,@MontoPorHorasAusentes,@MontoPorAdelantos,@MontoDeOtrosDescuentos,@SumaDeConceptosDeIngresos,@SumaDeConceptosDeDescuentos,@CodigoPeriodo)')
+end
+go
+
+create procedure Pagos.spCrearBoleta
+@FechaPago date,
+@SueldoBasico numeric(9,2),
+@AsignacionFamiliar numeric(9,2),
+@TotalDeIngresos numeric(9,2),
+@DescuentoPorAFP numeric(9,2),
+@TotalDeDescuentos numeric(9,2),
+@SueldoNeto numeric(9,2),
+@CodigoContrato nchar(6),
+@CodigoPeriodo nchar(6),
+@CodigoConceptoDePago nchar(6)
+as
+insert into Pagos.Boleta values (next value for Pagos.SecBoleta,@FechaPago,@SueldoBasico,@AsignacionFamiliar,@TotalDeIngresos,@DescuentoPorAFP,@TotalDeDescuentos,@TotalDeDescuentos,@SueldoNeto,@CodigoContrato,@CodigoPeriodo,@CodigoConceptoDePago)
+go
+
+--Mostrar Boleta
 select (select C.CodigoEmpleado from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Codigo Empleado",(select E.Nombre from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "Codigo Empleado",(select E.DNIEmpleado from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "DNI",B.TotalDeHoras as "Total de Horas",(select C.ValorHora from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Valor Hora",B.SueldoBasico as "Sueldo Basico",B.TotalDeIngresos as "Total de Ingresos",B.TotalDeDescuentos as "Total de Descuentos",B.SueldoNeto as "Sueldo Neto"from Pagos.Boleta as B where B.CodigoBoleta ='1'
+go
+--Mostrar Contratos del periodo
+create procedure Contratos.spMostrarContratosBoleta
+@FechaInicioPeriodo date,
+@FechaFinPeriodo date
+as
+select  C.CodigoContrato as 'Codigo',format(C.FechaInicio,'dd/MM//yyyy') as 'Fecha Inicio',format(C.FechaFin,'dd/MM//yyyy') as 'Fecha Fin',C.Cargo as 'Cargo',C.AsignacionFamiliar as 'Asignacion Familiar',(select A.NombreAFP from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'AFP', C.TotalDeHorasContratadasPorSemanas as 'Total De Horas Contratadas Por Semanas',C.ValorHora as 'ValorHora',C.CodigoEmpleado as 'Codigo Empleado',C.Estado as 'Estado' from Contratos.Contrato as C inner join Contratos.Periodo as P  on C.CodigoPeriodo=P.CodigoPeriodo where  C.FechaInicio > @FechaInicioPeriodo or C.FechaInicio = @FechaInicioPeriodo and C.FechaFin < @FechaFinPeriodo or C.FechaFin = @FechaFinPeriodo
+go
 
+exec Contratos.spMostrarContratosBoleta '2019-11-15','2020-11-15'
+select * from Contratos.Contrato
+
+exec Contratos.spMostrarContrato '1'
+exec Contratos.spListarPeriodo 
 --INSERCIONES--
 
 --Agregar Empleados

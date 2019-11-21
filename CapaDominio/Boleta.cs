@@ -10,6 +10,7 @@ namespace CapaDominio
     {
         //Atributos
         string codigoBoleta;
+        string fechaDePago;
         double sueldoBasico;
         double asignacionFamiliar;
         double totalDeIngresos;
@@ -23,6 +24,7 @@ namespace CapaDominio
 
         //Campos Encapsulados
         public string CodigoBoleta { get => codigoBoleta; set => codigoBoleta = value; }
+        public string FechaDePago { get => fechaDePago; set => fechaDePago = value; }
         public double SueldoBasico { get => sueldoBasico; set => sueldoBasico = value; }
         public double AsignacionFamiliar { get => asignacionFamiliar; set => asignacionFamiliar = value; }
         public double TotalDeIngresos { get => totalDeIngresos; set => totalDeIngresos = value; }
