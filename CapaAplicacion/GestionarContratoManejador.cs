@@ -39,5 +39,10 @@ namespace CapaAplicacion
             objContratoDAO.AnularContrato(objContrato);
         }
 
+        //Mostrar Contrato del Periodo
+        public DataTable MostrarContratoDelPeriodo(Periodo objPeriodo)
+        {
+            return objContratoDAO.MostrarContratoDelPeriodo(objPeriodo);
+        }
     }
 }

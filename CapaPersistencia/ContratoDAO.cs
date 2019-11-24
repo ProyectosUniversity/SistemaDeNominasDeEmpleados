@@ -112,6 +112,32 @@ namespace CapaPersistencia
                 }
             }
         }
+
+        //Mostrar Contrato Del Periodo
+        public DataTable MostrarContratoDelPeriodo(Periodo objPeriodo)
+        {
+            using (var conexion = GetConnection())
+            {
+                conexion.Open();
+                using (var cmd = new SqlCommand())
+                {
+                    cmd.Connection = conexion;
+                    cmd.CommandText = "Contratos.spMostrarContratosBoleta";
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@FechaInicioPeriodo", objPeriodo.FechaInicio);
+                    cmd.Parameters.AddWithValue("@FechaFinPeriodo", objPeriodo.FechaFin);
+                    leer = cmd.ExecuteReader();
+                    tabla.Load(leer);
+
+                    conexion.Close();
+                    leer.Close();
+                    return tabla;
+                }
+            }
+        }
+
+
     }
 
 }

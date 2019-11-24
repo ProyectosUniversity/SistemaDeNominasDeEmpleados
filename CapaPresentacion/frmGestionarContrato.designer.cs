@@ -136,6 +136,7 @@
             this.dtContratos.GridColor = System.Drawing.Color.SteelBlue;
             this.dtContratos.Location = new System.Drawing.Point(25, 244);
             this.dtContratos.Name = "dtContratos";
+            this.dtContratos.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -148,7 +149,7 @@
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Violet;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
             this.dtContratos.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dtContratos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;

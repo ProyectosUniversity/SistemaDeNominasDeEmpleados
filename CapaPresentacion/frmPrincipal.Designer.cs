@@ -52,6 +52,7 @@
             this.btnProcesarPagos.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnProcesarPagos.FlatAppearance.BorderSize = 0;
             this.btnProcesarPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProcesarPagos.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProcesarPagos.Location = new System.Drawing.Point(0, 162);
             this.btnProcesarPagos.Name = "btnProcesarPagos";
             this.btnProcesarPagos.Size = new System.Drawing.Size(200, 44);
@@ -65,6 +66,7 @@
             this.btnGestionarContrato.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnGestionarContrato.FlatAppearance.BorderSize = 0;
             this.btnGestionarContrato.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGestionarContrato.Font = new System.Drawing.Font("Britannic Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarContrato.Location = new System.Drawing.Point(0, 118);
             this.btnGestionarContrato.Name = "btnGestionarContrato";
             this.btnGestionarContrato.Size = new System.Drawing.Size(200, 44);
