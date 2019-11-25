@@ -460,8 +460,10 @@ create procedure Contratos.spMostrarContratosBoleta
 @FechaInicioPeriodo date,
 @FechaFinPeriodo date
 as
-select  C.CodigoContrato as 'Codigo',format(C.FechaInicio,'dd/MM//yyyy') as 'Fecha Inicio',format(C.FechaFin,'dd/MM//yyyy') as 'Fecha Fin',C.Cargo as 'Cargo',C.AsignacionFamiliar as 'Asignacion Familiar',(select A.NombreAFP from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'AFP', C.TotalDeHorasContratadasPorSemanas as 'Total De Horas Contratadas Por Semanas',C.ValorHora as 'ValorHora',C.CodigoEmpleado as 'Codigo Empleado',C.Estado as 'Estado' from Contratos.Contrato as C inner join Contratos.Periodo as P  on C.CodigoPeriodo=P.CodigoPeriodo where  C.FechaInicio > @FechaInicioPeriodo or C.FechaInicio = @FechaInicioPeriodo and C.FechaFin < @FechaFinPeriodo or C.FechaFin = @FechaFinPeriodo
+select  C.CodigoContrato as 'Codigo',format(C.FechaInicio,'dd/MM//yyyy') as 'Fecha Inicio',format(C.FechaFin,'dd/MM//yyyy') as 'Fecha Fin',C.Cargo as 'Cargo',C.AsignacionFamiliar as 'Asignacion Familiar',(select A.NombreAFP from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'AFP',(select A.PorcentajeDeDescuento from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'Descuento AFP', C.TotalDeHorasContratadasPorSemanas as 'Total De Horas Contratadas Por Semanas',C.ValorHora as 'ValorHora',C.CodigoEmpleado as 'Codigo Empleado',C.Estado as 'Estado' from Contratos.Contrato as C inner join Contratos.Periodo as P  on C.CodigoPeriodo=P.CodigoPeriodo  where  C.FechaInicio > @FechaInicioPeriodo or C.FechaInicio = @FechaInicioPeriodo and C.FechaFin < @FechaFinPeriodo or C.FechaFin = @FechaFinPeriodo
 go
+
+
 
 exec Contratos.spMostrarContratosBoleta '2019-11-15','2020-11-15'
 select * from Contratos.Contrato
@@ -486,7 +488,7 @@ exec Contratos.spListarPeriodo
   insert into Contratos.Periodo values(next value for SecPeriodo ,'2019-11-15','2020-11-15','activo')
 go
 
-
+exec Contratos.MostrarPeriodo
 exec Contratos.spMostrarContrato 2
 
 exec Contratos.spMostrarEmpleado

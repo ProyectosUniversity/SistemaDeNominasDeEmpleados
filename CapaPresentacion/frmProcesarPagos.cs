@@ -20,13 +20,20 @@ namespace CapaPresentacion
             InitializeComponent();
         }
 
+        //Objetos de la Capa de Aplicacion
         GestionarBoletaManejador objGestionarBoletaManejador = new GestionarBoletaManejador();
         GestionarPeriodoManejador objGestionarPeriodoManejador = new GestionarPeriodoManejador();
         GestionarContratoManejador objGestionarContratoManejador = new GestionarContratoManejador();
 
+        //Objetos de la Capa de Dominio
+        AFP objAFP = new AFP();
         Boleta objBoleta = new Boleta();
         Periodo objPeriodo = new Periodo();
         Contrato objContrato = new Contrato();
+        ConceptoDePago objConceptoDePago = new ConceptoDePago();
+
+        double PorcentajeDeDescuento;
+        //Metodos que se ejecutaran al cargar el formulario
         private void frmProcesarPagos_Load(object sender, EventArgs e)
         {
             MostrarPeriodo();
@@ -35,17 +42,20 @@ namespace CapaPresentacion
             MostrarContratoDelPeriodo(objPeriodo);
         }
 
+        //Metodo para mostrar los datos del periodo
         public void MostrarPeriodo()
         {
             dtFechas.DataSource= objGestionarPeriodoManejador.listarPeriodo(); 
         }
 
+        //Metodo para mostrar contratos que estan dentro del periodo
         public void MostrarContratoDelPeriodo(Periodo objPeriodo)
         {
            dtBoletas.DataSource= objGestionarContratoManejador.MostrarContratoDelPeriodo(objPeriodo);
+            //dtBoletas.Columns[6].Visible = false;
         }
 
-        //Funcion para procesar Datos
+        //Funcion para procesar Datos del contrato
         public void ProcesarDatosDelContrato(List<Contrato> listaDeDatosDelContrato)
         {
             List<Boleta> objListaBoleta = new List<Boleta>();
@@ -57,6 +67,9 @@ namespace CapaPresentacion
             lista.Columns.Add("Total de Horas", typeof(double));
             lista.Columns.Add("Valor Hora", typeof(double));
             lista.Columns.Add("Sueldo Básico", typeof(double));
+            lista.Columns.Add("Total de Ingresos", typeof(double));
+            lista.Columns.Add("Total de Descuentos", typeof(double));
+            lista.Columns.Add("Sueldo Neto", typeof(double));
 
             foreach (var dato in listaDeDatosDelContrato)
             {
@@ -69,15 +82,29 @@ namespace CapaPresentacion
                 objBoleta.TotalDeHoras = objBoleta.calcularTotalDeHoras(objContrato,objPeriodo);
                 objContrato.ValorHora = dato.ValorHora;
                 objBoleta.SueldoBasico = objBoleta.calcularSueldoBasico(objContrato);
-
+                if (dato.AsignacionFamiliar == "Si")
+                {
+                    objBoleta.AsignacionFamiliar = objBoleta.calcularAsignacionFamiliar();
+                }
+                else
+                {
+                    objBoleta.AsignacionFamiliar = 0;
+                }
+                objBoleta.TotalDeIngresos = objBoleta.calcularTotalDeIngresos(objConceptoDePago);
+                objAFP.PorcentajeDeDescuento1 = dato.PorcentajeDeDescuento1;
+                objBoleta.DescuentoPorAFP = objBoleta.calcularDescuentoPorAFP(objAFP);
+                objBoleta.TotalDeDescuentos = objBoleta.calcularTotalDeDescuentos(objConceptoDePago);
+                objBoleta.SueldoNeto = objBoleta.calcularSueldoNeto();
                 //Añadimos los datos calculados a una lista local
                 lista.Rows.Add(new object[]
                 {
                   dato.CodigoEmpleado,
                   objBoleta.TotalDeHoras,
                   dato.ValorHora,
-                  objBoleta.SueldoBasico
-
+                  objBoleta.SueldoBasico,
+                  objBoleta.TotalDeIngresos,
+                  objBoleta.TotalDeDescuentos,
+                  objBoleta.SueldoNeto
 
                 });
                 objListaBoleta.Add(Boletas);
@@ -88,7 +115,7 @@ namespace CapaPresentacion
 
         }
 
-        //Boton Procesar Periodo
+        //Boton para procesar el periodo
         private void btnProcesar_Click(object sender, EventArgs e)
         {
             List<Contrato> datosContrato = new List<Contrato>();
@@ -99,14 +126,17 @@ namespace CapaPresentacion
                 {
                     CodigoContrato = Convert.ToString(fila.Cells[0].Value),
                     AsignacionFamiliar = Convert.ToString(fila.Cells[4].Value),
-                    TotalDeHorasContratadasPorSemanas = Convert.ToDouble(fila.Cells[6].Value),
-                    ValorHora = Convert.ToDouble(fila.Cells[7].Value),
-                    CodigoEmpleado = Convert.ToString(fila.Cells[8].Value)
+                    PorcentajeDeDescuento1= Convert.ToDouble(fila.Cells[6].Value),
+                    TotalDeHorasContratadasPorSemanas = Convert.ToDouble(fila.Cells[7].Value),
+                    ValorHora = Convert.ToDouble(fila.Cells[8].Value),
+                    CodigoEmpleado = Convert.ToString(fila.Cells[9].Value)
                 };
                 datosContrato.Add(objcontrato);
 
             }
             ProcesarDatosDelContrato(datosContrato);
         }
+
+
     }
 }
