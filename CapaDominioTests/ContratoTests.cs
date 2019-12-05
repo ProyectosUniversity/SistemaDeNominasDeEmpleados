@@ -165,7 +165,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "primaria";
+            objEmpleado.GradoAcademico = "primaria";
             objContrato.ValorHora = 6;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -177,7 +177,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "secundaria";
+            objEmpleado.GradoAcademico = "secundaria";
             objContrato.ValorHora = 9;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -189,7 +189,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "bachiller";
+            objEmpleado.GradoAcademico = "bachiller";
             objContrato.ValorHora = 12;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -202,7 +202,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "profesional";
+            objEmpleado.GradoAcademico = "profesional";
             objContrato.ValorHora = 21;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -214,7 +214,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "magister";
+            objEmpleado.GradoAcademico = "magister";
             objContrato.ValorHora = 31;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -226,7 +226,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "doctor";
+            objEmpleado.GradoAcademico = "doctor";
             objContrato.ValorHora = 41;
             bool resultadoEsperado = true;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -239,7 +239,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "primaria";
+            objEmpleado.GradoAcademico = "primaria";
             objContrato.ValorHora = 4;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -251,7 +251,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "secundaria";
+            objEmpleado.GradoAcademico = "secundaria";
             objContrato.ValorHora = 11;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -263,7 +263,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "bachiller";
+            objEmpleado.GradoAcademico = "bachiller";
             objContrato.ValorHora = 10;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -276,7 +276,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "profesional";
+            objEmpleado.GradoAcademico = "profesional";
             objContrato.ValorHora = 20;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -288,7 +288,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "magister";
+            objEmpleado.GradoAcademico = "magister";
             objContrato.ValorHora = 30;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);
@@ -300,7 +300,7 @@ namespace CapaDominio.Tests
         {
             Contrato objContrato = new Contrato();
             Empleado objEmpleado = new Empleado();
-            objEmpleado.GradoAcademico1 = "doctor";
+            objEmpleado.GradoAcademico = "doctor";
             objContrato.ValorHora = 40;
             bool resultadoEsperado = false;
             bool resultadoObtenido = objContrato.determinarValorHora(objEmpleado);

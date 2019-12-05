@@ -105,7 +105,7 @@ Begin
 	DNIEmpleado char(8) not null,
 	Nombre Texto,
 	Direccion nvarchar(200) not null,
-    Telefono nchar(9) not null,
+    Telefono char(9) not null,
 	FechaDeNacimiento DATE,
 	EstadoCivil varchar(100) not null,
 	GradoAcademico varchar(100) not null
@@ -123,6 +123,22 @@ Begin
 	PorcentajeDeDescuento Calculo default 0,
 	constraint CodigoAFPPK primary key  (CodigoAFP)
     )on  PagosEsquemaParticion  (CodigoAFP)
+end
+go
+
+--TABLA PERIODO
+if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Contratos' and TABLE_NAME='Periodo')
+Begin
+    create table Contratos.Periodo
+    (CodigoPeriodo  Codigo ,
+     FechaInicio DATE default GetDate(),
+     FechaFin DATE,
+     Estado varchar(20) not null,
+	 constraint FechaInicio_CK check (FechaInicio < FechaFin),
+	 constraint FechaFin_CK check (FechaFin > FechaInicio),
+	 constraint EstadoCK check (Estado='Activo' or Estado='Procesado'),
+	 constraint CodigoPeriodoPK primary key  (CodigoPeriodo)
+     )on  ContratosEsquemaParticion(CodigoPeriodo)
 end
 go
 
@@ -154,23 +170,6 @@ Begin
 end
 go
 
-
---TABLA PERIODO
-if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Contratos' and TABLE_NAME='Periodo' )
-Begin
-    create table Contratos.Periodo
-    (CodigoPeriodo  Codigo ,
-     FechaInicio DATE default GetDate(),
-     FechaFin DATE,
-     Estado nchar(1) not null,
-	 constraint FechaInicio_CK check (FechaInicio < FechaFin),
-	 constraint FechaFin_CK check (FechaFin > FechaInicio),
-	 constraint EstadoCK check (Estado='activo' or Estado='inactivo'),
-	 constraint CodigoPeriodoPK primary key  (CodigoPeriodo)
-     )on  ContratosEsquemaParticion(CodigoPeriodo)
-end
-go
-
 --TABLA CONCEPTODEPAGO
 if not exists (select * from Information_Schema.Tables WHERE TABLE_SCHEMA = 'Pagos' and TABLE_NAME='ConceptoDePago' )
 Begin
@@ -184,9 +183,11 @@ Begin
 	 MontoDeOtrosDescuentos Calculo,
      SumaDeConceptosDeIngresos Calculo default 0,
 	 SumaDeConceptosDeDescuentos Calculo default 0,
-	 CodigoPeriodo Codigo
+	 CodigoPeriodo Codigo,
+	 CodigoContrato Codigo
 	 constraint CodigoConceptoDePagoPK primary key  (CodigoConceptoDePago),
-	 constraint CodigoPeriodoFK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo)
+	 constraint CodigoPeriodoFK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo),
+	 constraint CodigoContratoFK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato)
      )on  PagosEsquemaParticion(CodigoConceptoDePago)
 end
 go
@@ -208,7 +209,7 @@ Begin
 	 CodigoPeriodo Codigo,
 	 CodigoConceptoDePago Codigo,
 	 constraint CodigoBoletaPK primary key  (CodigoBoleta),
-	 constraint CodigoContratoFK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato),
+	 constraint CodigoContrato_FK foreign key (CodigoContrato) references Contratos.Contrato(CodigoContrato),
 	 constraint CodigoPeriodo_FK foreign key (CodigoPeriodo) references Contratos.Periodo(CodigoPeriodo),
 	 constraint CodigoConceptoDePago_FK foreign key (CodigoConceptoDePago) references Pagos.ConceptoDePago(CodigoConceptoDePago)
      )on  PagosEsquemaParticion(CodigoBoleta)
@@ -288,8 +289,6 @@ go
     End
  go
 
-
-
  --------CREACION DE INDICES-------
 
  --------PROCEDIMIENTOS ALMACENADOS PARA EMPLEADO-------
@@ -312,31 +311,25 @@ go
   end
 go
 
-
  --Buscar Empleado
-create procedure Contratos.spBuscarEmpleado
-    @DNIEmpleado varchar(8)
+ create procedure Contratos.spBuscarEmpleado
+    @DNIEmpleado char(8)
 	as
-	select E.CodigoEmpleado as "Codigo" ,E.Nombre as "Nombre", E.Direccion as "Direccion", E.Telefono as "Telefono", E.FechaDeNacimiento as "Fecha de Nacimiento", E.EstadoCivil as "Estado Civil", E.GradoAcademico as "Grado Academico" from Contratos.Empleado as E where E.DNIEmpleado like @DNIEmpleado +'%'
+	select E.CodigoEmpleado as "Codigo" ,E.Nombre as "Nombre", E.Direccion as "Direccion", E.Telefono as "Telefono", format(E.FechaDeNacimiento ,'dd/MM/yyyy') as "Fecha de Nacimiento", E.EstadoCivil as "Estado Civil", E.GradoAcademico as "Grado Academico" from Contratos.Empleado as E where E.DNIEmpleado=@DNIEmpleado
+	go
 
---Mostrar Empleado
- if not exists (select * from sys.procedures where name='Contratos.spMostrarEmpleado')
-  Begin
-     exec('create procedure Contratos.spMostrarEmpleado
-			as
-			select CodigoEmpleado as "Codigo",Nombre as "Nombre", Direccion as "Direccion", Telefono as "Telefono",FechaDeNacimiento as "Fecha de Nacimiento", EstadoCivil as "Estado Civil", GradoAcademico as "Grado Academico" from Contratos.Empleado')
-  end
-go
 
+--------PROCEDIMIENTOS ALMACENADOS PARA AFP-------
 
 --Agregar AFP
 if not exists (select * from sys.procedures where name='Pagos.spAgregarAFP')
   Begin
     exec(' create procedure Pagos.spAgregarAFP
+           @NombreAFP varchar(50),
            @PorcentajeDeDescuento numeric(9,2)
 			as
 			insert into Pagos.AFP values (next value for 
-			   SecAFP,@PorcentajeDeDescuento )')
+			   SecAFP,@NombreAFP,@PorcentajeDeDescuento )')
   end
 go
 
@@ -349,6 +342,36 @@ if not exists (select * from sys.procedures where name='Pagos.spListarAFP')
   end
 go
 
+--------PROCEDIMIENTOS ALMACENADOS PARA PERIODO-------
+
+--Nuevo Periodo
+if not exists (select * from sys.procedures where name='Contratos.spNuevoPeriodo')
+  Begin
+    exec('create procedure Contratos.spNuevoPeriodo
+	        @FechaInicio DATE,
+	        @FechaFin DATE,
+	        @Estado varchar(20)
+			as
+			insert into Contratos.Periodo values (next value for Contratos.SecPeriodo,@FechaInicio,@FechaFin,@Estado)')
+  end
+go
+
+
+--Mostrar Datos del Periodo
+create procedure Contratos.spMostrarPeriodoActivo
+as
+select format(P.FechaInicio ,'dd/MM/yyyy') as 'Fecha Inicio' ,format(P.FechaFin ,'dd/MM/yyyy') as 'Fecha Fin',P.Estado as 'Estado' from Contratos.Periodo as P where P.FechaFin >= GETDATE()
+go
+
+--Mostrar Contratos del periodo
+create procedure Contratos.spMostrarContratosBoleta
+@FechaInicioPeriodo date,
+@FechaFinPeriodo date
+as
+select  C.CodigoContrato as 'Codigo',format(C.FechaInicio,'dd/MM//yyyy') as 'Fecha Inicio',format(C.FechaFin,'dd/MM//yyyy') as 'Fecha Fin',C.Cargo as 'Cargo',C.AsignacionFamiliar as 'Asignacion Familiar',(select A.NombreAFP from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'AFP',(select A.PorcentajeDeDescuento from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'Descuento AFP', C.TotalDeHorasContratadasPorSemanas as 'Total De Horas Contratadas Por Semanas',C.ValorHora as 'ValorHora',C.CodigoEmpleado as 'Codigo Empleado',C.Estado as 'Estado' from Contratos.Contrato as C inner join Contratos.Periodo as P  on C.CodigoPeriodo=P.CodigoPeriodo  where  C.FechaInicio > @FechaInicioPeriodo or C.FechaInicio = @FechaInicioPeriodo and C.FechaFin < @FechaFinPeriodo or C.FechaFin = @FechaFinPeriodo
+go
+
+--------PROCEDIMIENTOS ALMACENADOS PARA CONTRATO-------
 
  --Crear Contrato
  if not exists (select * from sys.procedures where name='Contratos.spCrearContrato')
@@ -360,16 +383,16 @@ go
 			@AsignacionFamiliar char(2),
 			@TotalDeHorasContratadasPorSemanas numeric(9,2),
 			@ValorHora numeric(9,2),
+			@Estado varchar(10),
 			@CodigoEmpleado nchar(6),
 			@CodigoAFP nchar(6),
-			@Estado varchar(10)
+			@CodigoPeriodo nchar(6)
 			as
 			insert into Contratos.Contrato values (next value for 
 			   Contratos.SecContrato, @FechaInicio, @FechaFin, @Cargo,  @AsignacionFamiliar,@TotalDeHorasContratadasPorSemanas,
-			   @ValorHora,@CodigoEmpleado,@CodigoAFP,@Estado)')
+			   @ValorHora,@Estado,@CodigoEmpleado,@CodigoAFP,@CodigoPeriodo)')
   end
 go
-
 
 --Editar Contrato
 if not exists (select * from sys.procedures where name='Contratos.spEditarContrato')
@@ -382,23 +405,20 @@ if not exists (select * from sys.procedures where name='Contratos.spEditarContra
 			@AsignacionFamiliar char(2),
 			@TotalDeHorasContratadasPorSemanas numeric(9,2),
 			@ValorHora numeric(9,2),
+			@Estado varchar(10),
 			@CodigoEmpleado nchar(6),
 			@CodigoAFP nchar(6),
-			@Estado varchar(10)
+			@CodigoPeriodo nchar(6)
      as
-	   update Contratos.Contrato  set  FechaInicio= @FechaInicio, FechaFin = @FechaFin, Cargo = @Cargo,AsignacionFamiliar = @AsignacionFamiliar,TotalDeHorasContratadasPorSemanas = @TotalDeHorasContratadasPorSemanas,ValorHora = @ValorHora,CodigoEmpleado = @CodigoEmpleado,CodigoAFP = @CodigoAFP,Estado=@Estado where CodigoContrato = @CodigoContrato')
+	   update Contratos.Contrato  set  FechaInicio= @FechaInicio, FechaFin = @FechaFin, Cargo = @Cargo,AsignacionFamiliar = @AsignacionFamiliar,TotalDeHorasContratadasPorSemanas = @TotalDeHorasContratadasPorSemanas,ValorHora = @ValorHora,Estado=@Estado,CodigoEmpleado = @CodigoEmpleado,CodigoAFP = @CodigoAFP,CodigoPeriodo = @CodigoPeriodo where CodigoContrato = @CodigoContrato')
   end
 go
 
 --Anular Contrato
- create procedure Contratos.spCambiarEstado
-            @CodigoContrato nchar(6),
-            @Estado varchar(10)
+create procedure Contratos.spAnularContrato
+            @CodigoContrato nchar(6)
      as
-	   update Contratos.Contrato set  Estado=@Estado where CodigoContrato = @CodigoContrato
-	   go
-
-
+	   update Contratos.Contrato set  Estado='Anulado' where CodigoContrato = @CodigoContrato
 --Mostrar Contrato de un Empleado
  if not exists (select * from sys.procedures where name='Contratos.spMostrarContrato')
   Begin
@@ -409,17 +429,8 @@ go
   end
 go 
 
-
---Mostrar Datos del Periodo
-create procedure Contratos.MostrarPeriodo
-as
-select P.FechaInicio as "Fecha Inicio" ,P.FechaFin as "Fecha Fin" from Contratos.Periodo as P where  P.CodigoPeriodo='1'
-go
-exec Contratos.MostrarPeriodo
-select * from Pagos.ConceptoDePago
-go
-
---Crear Boleta
+--------PROCEDIMIENTOS ALMACENADOS PARA CONCEPTOS DE PAGOS-------
+--Crear Conceptos de Pagos
 if not exists (select * from sys.procedures where name='Pagos.spGuardarConceptosDePago')
   Begin
     exec('create procedure Pagos.spGuardarConceptosDePago
@@ -431,12 +442,15 @@ if not exists (select * from sys.procedures where name='Pagos.spGuardarConceptos
 @MontoDeOtrosDescuentos numeric(9,2),
 @SumaDeConceptosDeIngresos numeric(9,2),
 @SumaDeConceptosDeDescuentos numeric(9,2),
-@CodigoPeriodo nchar(6)
+@CodigoPeriodo nchar(6),
+@CodigoContrato nchar(6)
 as
-insert into Pagos.ConceptoDePago values (next value for Pagos.SecConceptoDePago,@MontoPorHorasExtra,@MontoPorPorReintegros,@MontoDeOtrosIngresos,@MontoPorHorasAusentes,@MontoPorAdelantos,@MontoDeOtrosDescuentos,@SumaDeConceptosDeIngresos,@SumaDeConceptosDeDescuentos,@CodigoPeriodo)')
+insert into Pagos.ConceptoDePago values (next value for Pagos.SecConceptoDePago,@MontoPorHorasExtra,@MontoPorPorReintegros,@MontoDeOtrosIngresos,@MontoPorHorasAusentes,@MontoPorAdelantos,@MontoDeOtrosDescuentos,@SumaDeConceptosDeIngresos,@SumaDeConceptosDeDescuentos,@CodigoPeriodo,@CodigoContrato)')
 end
 go
 
+--------PROCEDIMIENTOS ALMACENADOS PARA CONCEPTOS DE PAGOS-------
+--Crear Boleta
 create procedure Pagos.spCrearBoleta
 @FechaPago date,
 @SueldoBasico numeric(9,2),
@@ -455,44 +469,36 @@ go
 --Mostrar Boleta
 select (select C.CodigoEmpleado from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Codigo Empleado",(select E.Nombre from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "Codigo Empleado",(select E.DNIEmpleado from Contratos.Contrato as C,Contratos.Empleado as E where B.CodigoContrato=C.CodigoContrato and C.CodigoContrato=E.CodigoEmpleado) as "DNI",B.TotalDeHoras as "Total de Horas",(select C.ValorHora from Contratos.Contrato as C where C.CodigoContrato=B.CodigoContrato) as "Valor Hora",B.SueldoBasico as "Sueldo Basico",B.TotalDeIngresos as "Total de Ingresos",B.TotalDeDescuentos as "Total de Descuentos",B.SueldoNeto as "Sueldo Neto"from Pagos.Boleta as B where B.CodigoBoleta ='1'
 go
---Mostrar Contratos del periodo
-create procedure Contratos.spMostrarContratosBoleta
-@FechaInicioPeriodo date,
-@FechaFinPeriodo date
-as
-select  C.CodigoContrato as 'Codigo',format(C.FechaInicio,'dd/MM//yyyy') as 'Fecha Inicio',format(C.FechaFin,'dd/MM//yyyy') as 'Fecha Fin',C.Cargo as 'Cargo',C.AsignacionFamiliar as 'Asignacion Familiar',(select A.NombreAFP from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'AFP',(select A.PorcentajeDeDescuento from Pagos.AFP as A where A.CodigoAFP=C.CodigoAFP) as 'Descuento AFP', C.TotalDeHorasContratadasPorSemanas as 'Total De Horas Contratadas Por Semanas',C.ValorHora as 'ValorHora',C.CodigoEmpleado as 'Codigo Empleado',C.Estado as 'Estado' from Contratos.Contrato as C inner join Contratos.Periodo as P  on C.CodigoPeriodo=P.CodigoPeriodo  where  C.FechaInicio > @FechaInicioPeriodo or C.FechaInicio = @FechaInicioPeriodo and C.FechaFin < @FechaFinPeriodo or C.FechaFin = @FechaFinPeriodo
-go
 
 
 
-exec Contratos.spMostrarContratosBoleta '2019-11-15','2020-11-15'
-select * from Contratos.Contrato
-
-exec Contratos.spMostrarContrato '1'
-exec Contratos.spListarPeriodo 
 --INSERCIONES--
 
 --Agregar Empleados
-  exec Contratos.spAgregarEmpleado 75318053,'Francisco','Av. America 452', 967582412,'1998-07-17','soltero','secundaria'
+  exec Contratos.spAgregarEmpleado 75318053,'Francisco','Av. El Ejercito 563-A', 924577696,'1998-07-17','soltero','Secundaria'
 
-  exec Contratos.spAgregarEmpleado 17863287,'Usuario2','Av. Larco 124', 977812400,'1996-10-21','casado','bachiller'
+  exec Contratos.spAgregarEmpleado 17863287,'Brayan','Av. Los Angeles 424', 977812400,'1996-10-21','casado','Bachiller'
+  exec Contratos.spAgregarEmpleado 21432847,'Mirian','Calle San Valentin 327', 925637852,'1997-05-18','casado','Profesional'
+  exec Contratos.spAgregarEmpleado 29863247,'Carlos','Av. Larco 124', 945824407,'1995-06-25','casado','Magister'
+  exec Contratos.spAgregarEmpleado 32563487,'George','Av. America 452', 956235725,'1996-11-23','soltero','Doctor'
+  exec Contratos.spAgregarEmpleado 32574867,'Mario','Av. Los Arcos 452', 956245725,'1996-11-24','soltero','Primaria'
+  
 --Insertando AFP
-  exec Pagos.spAgregarAFP 13
-  exec Pagos.spAgregarAFP 12
+  exec Pagos.spAgregarAFP 'Habitad',0.10
+  exec Pagos.spAgregarAFP 'Integra',0.10
+  exec Pagos.spAgregarAFP 'Prima',0.10
+  exec Pagos.spAgregarAFP 'Profuturo',0.10 
+
+--Nuevo Periodo
+exec Contratos.spNuevoPeriodo '2019-11-15','2020-11-15','Activo'
 
  --Crear Contrato
-   exec Contratos.spCrearContrato '2019-10-24','2020-05-15','Trabajador','No',30,8,1,1
+   exec Contratos.spCrearContrato '2019-11-24','2020-7-15','Trabajador','No',8,8,'Vigente',1,1,1
+   exec Contratos.spCrearContrato '2019-11-24','2020-7-15','Trabajador','Si',30,12,'Vigente',2,2,1
+   exec Contratos.spCrearContrato '2019-11-24','2020-7-15','Trabajador','No',30,22,'Vigente',3,3,1
+   exec Contratos.spCrearContrato '2019-11-24','2020-7-15','Trabajador','Si',30,32,'Vigente',4,4,1
+   exec Contratos.spCrearContrato '2019-11-21','2020-10-15','jefe de Area','No',30,32,'Vigente',5,4,1
+   exec Contratos.spCrearContrato '2019-11-21','2020-10-15','jefe de Area','No',30,32,'Vigente',5,4,1
  --Editar Contrato
-   exec Contratos.spEditarContrato 1,'2019-10-24','2020-05-15','Empleado','Si',30,8,1,1
-
-  insert into Contratos.Periodo values(next value for SecPeriodo ,'2019-11-15','2020-11-15','activo')
+   exec Contratos.spCrearContrato '2019-11-21','2020-10-15','jefe de Area','No',40,32,'Vigente',6,4,1
 go
-
-exec Contratos.MostrarPeriodo
-exec Contratos.spMostrarContrato 2
-
-exec Contratos.spMostrarEmpleado
-
-exec Contratos.spCrearContrato 
-'2019-10-24','2020-08-15','Empleado','Si',30,8,2,2,'Vigente'
-select * from Contratos.Contrato where CodigoEmpleado=2

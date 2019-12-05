@@ -21,10 +21,8 @@ namespace CapaPresentacion
         }
 
         //Objetos de la Capa de Aplicacion
-        GestionarBoletaManejador objGestionarBoletaManejador = new GestionarBoletaManejador();
-        GestionarPeriodoManejador objGestionarPeriodoManejador = new GestionarPeriodoManejador();
         GestionarContratoManejador objGestionarContratoManejador = new GestionarContratoManejador();
-
+        ProcesarPagosManejador objProcresarPagosManejador = new ProcesarPagosManejador();
         //Objetos de la Capa de Dominio
         AFP objAFP = new AFP();
         Boleta objBoleta = new Boleta();
@@ -32,7 +30,6 @@ namespace CapaPresentacion
         Contrato objContrato = new Contrato();
         ConceptoDePago objConceptoDePago = new ConceptoDePago();
 
-        double PorcentajeDeDescuento;
         //Metodos que se ejecutaran al cargar el formulario
         private void frmProcesarPagos_Load(object sender, EventArgs e)
         {
@@ -45,14 +42,16 @@ namespace CapaPresentacion
         //Metodo para mostrar los datos del periodo
         public void MostrarPeriodo()
         {
-            dtFechas.DataSource= objGestionarPeriodoManejador.listarPeriodo(); 
+            dtFechas.DataSource= objProcresarPagosManejador.listarPeriodo();
+            dtFechas.Columns[2].Visible = false;
         }
 
         //Metodo para mostrar contratos que estan dentro del periodo
         public void MostrarContratoDelPeriodo(Periodo objPeriodo)
         {
            dtBoletas.DataSource= objGestionarContratoManejador.MostrarContratoDelPeriodo(objPeriodo);
-            //dtBoletas.Columns[6].Visible = false;
+           dtBoletas.Columns[0].Visible = false;
+           dtBoletas.Columns[9].Visible = false;
         }
 
         //Funcion para procesar Datos del contrato

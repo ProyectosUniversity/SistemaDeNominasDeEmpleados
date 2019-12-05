@@ -16,8 +16,8 @@ namespace CapaPresentacion
     public partial class frmDatosContrato : Form
     {
         //Objetos de la CapaAplicacion
-        GestionarContratoManejador objGestionarContrato = new GestionarContratoManejador();
-        GestionarAFPManejador objGestionarAFP = new GestionarAFPManejador();
+        GestionarContratoManejador objGestionarContratoManejador = new GestionarContratoManejador();
+        
         //Objetos de la CapaDominio
         Empleado objEmpleado = new Empleado();
         Contrato objContrato = new Contrato();
@@ -49,8 +49,8 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    objContrato.FechaInicio = dtpFechaInicio.Value;
-                    objContrato.FechaFin = dtpFechaFin.Value;
+                    objContrato.FechaInicio = Convert.ToDateTime(dtpFechaInicio.Value);
+                    objContrato.FechaFin = Convert.ToDateTime(dtpFechaFin.Value);
                     objContrato.Cargo = txtCargo.Text;
                     if (rdSi.Checked)
                     {
@@ -67,22 +67,15 @@ namespace CapaPresentacion
                     objContrato.CodigoAFP = Convert.ToString(cmbAFP.SelectedValue);
                     objContrato.CodigoPeriodo = "1";
 
-                    objEmpleado.GradoAcademico1 = GradoAcademico;
+                    objEmpleado.GradoAcademico = GradoAcademico;
 
                     var regla03 = objContrato.determinarFechaFin();
                     var regla04 = objContrato.determinarTotalDeHorasContratadasPorSemana();
                     var regla05 = objContrato.determinarValorHora(objEmpleado);
+                    objGestionarContratoManejador.CrearContrato(objContrato);
+                    MessageBox.Show("Se guardo el nuevo contrato");
+                    this.Close();
 
-                    if (regla03 == true && regla04 == true && regla05 == true)
-                    {
-                        objGestionarContrato.CrearContrato(objContrato);
-                        MessageBox.Show("Se guardo el nuevo contrato");
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo crear el contrato");
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -112,24 +105,16 @@ namespace CapaPresentacion
                     objContrato.CodigoEmpleado = CodigoEmpleado;
                     objContrato.CodigoPeriodo = "1";
 
-                    objEmpleado.GradoAcademico1 = GradoAcademico;
+                    objEmpleado.GradoAcademico = GradoAcademico;
 
                     var regla03 = objContrato.determinarFechaFin();
                     var regla04 = objContrato.determinarTotalDeHorasContratadasPorSemana();
                     var regla05 = objContrato.determinarValorHora(objEmpleado);
 
-
-                    if (regla03 == true && regla04 == true && regla05 == true)
-                    {
-                        objGestionarContrato.EditarContrato(objContrato);
-                        MessageBox.Show("Se guardó las modificaciones del contrato");
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudieron guardar las modificaciones del contrato");
-                    }
-
+                    objGestionarContratoManejador.EditarContrato(objContrato);
+                    MessageBox.Show("Se guardó las modificaciones del contrato");
+                    this.Close();
+                    
                 }
                 catch (Exception ex)
                 {
@@ -141,7 +126,7 @@ namespace CapaPresentacion
         //Metodo ListarAFP
         public void ListarAFP()
         {
-            cmbAFP.DataSource = objGestionarAFP.ListarAFP();
+            cmbAFP.DataSource = objGestionarContratoManejador.ListarAFP();
             cmbAFP.DisplayMember = "NombreAFP";
             cmbAFP.ValueMember = "CodigoAFP";
         }

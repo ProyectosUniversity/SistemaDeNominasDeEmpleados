@@ -21,7 +21,7 @@ namespace CapaPresentacion
         }
 
         //Objetos de la CapaAplicacion
-        GestionarEmpleadoManejador objGestionarEmpleado = new GestionarEmpleadoManejador();
+        GestionarContratoManejador objGestionarContratoManejador = new GestionarContratoManejador();
 
         //Objetos de la CapaDominio
         Empleado objEmpleado = new Empleado();
@@ -32,20 +32,20 @@ namespace CapaPresentacion
         //Buscar Empleado
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (objEmpleado.DNI1 != "")
+            if (objEmpleado.DNI != "")
             {
-                objEmpleado.DNI1 = txtBuscarEmpleado.Text;
-                var validarCajaTexto = objGestionarEmpleado.BuscarEmpleado(objEmpleado);
+                objEmpleado.DNI = txtBuscarEmpleado.Text;
+                var validarCajaTexto = objGestionarContratoManejador.BuscarEmpleado(objEmpleado);
                 if (validarCajaTexto == true)
                 {
                     txtBuscarEmpleado.Clear();
-                    objContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado1;
-                    lbNombre.Text = objEmpleado.Nombre1;
-                    lbDireccion.Text = objEmpleado.Direccion1;
-                    lbTelefono.Text = objEmpleado.Telefono1;
-                    lbFechaNacimiento.Text = objEmpleado.FechaDeNacimiento1;
-                    lbEstadoCivil.Text = objEmpleado.EstadoCivil1;
-                    lbGradoAcademico.Text = objEmpleado.GradoAcademico1;
+                    objContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado;
+                    lbNombre.Text = objEmpleado.Nombre;
+                    lbDireccion.Text = objEmpleado.Direccion;
+                    lbTelefono.Text = objEmpleado.Telefono;
+                    lbFechaNacimiento.Text = objEmpleado.FechaDeNacimiento;
+                    lbEstadoCivil.Text = objEmpleado.EstadoCivil;
+                    lbGradoAcademico.Text = objEmpleado.GradoAcademico;
 
                     MostrarContratoEmpleado(objContrato);
                     //Habilitar opciones
@@ -80,8 +80,8 @@ namespace CapaPresentacion
         public bool regla01()
         {
             //var elContratoEstaVigente = objContrato.elContratoEstaVigente();
-            objContrato.FechaInicio = Convert.ToDateTime(dtContratos.CurrentRow.Cells[1].Value.ToString());
-            objContrato.FechaFin = Convert.ToDateTime(dtContratos.CurrentRow.Cells[2].Value.ToString());
+            objContrato.FechaInicio = Convert.ToDateTime(dtContratos.CurrentRow.Cells[1].Value);
+            objContrato.FechaFin = Convert.ToDateTime(dtContratos.CurrentRow.Cells[2].Value);
             objContrato.Estado = dtContratos.CurrentRow.Cells[9].Value.ToString();
             var elContratoEstaVigente = objContrato.elContratoEstaVigente();
             if (elContratoEstaVigente == true)
@@ -105,8 +105,8 @@ namespace CapaPresentacion
                 {
                     frmContrato.Editarse = false;
                     frmContrato.ListarAFP();
-                    frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado1;
-                    frmContrato.GradoAcademico = objEmpleado.GradoAcademico1;
+                    frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado;
+                    frmContrato.GradoAcademico = objEmpleado.GradoAcademico;
                     frmContrato.ShowDialog();
                     MostrarContratoEmpleado(objContrato);
                     
@@ -121,8 +121,8 @@ namespace CapaPresentacion
             {
                 frmContrato.Editarse = false;
                 frmContrato.ListarAFP();
-                frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado1;
-                frmContrato.GradoAcademico = objEmpleado.GradoAcademico1;
+                frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado;
+                frmContrato.GradoAcademico = objEmpleado.GradoAcademico;
                 frmContrato.ShowDialog();
             }
             else
@@ -143,8 +143,8 @@ namespace CapaPresentacion
                     frmContrato.Editarse = true;
                 //Enviar Datos
                 frmContrato.CodigoContrato = dtContratos.CurrentRow.Cells[0].Value.ToString();
-                frmContrato.dtpFechaInicio.Value = Convert.ToDateTime(dtContratos.CurrentRow.Cells[1].Value.ToString());
-                frmContrato.dtpFechaFin.Value = Convert.ToDateTime(dtContratos.CurrentRow.Cells[2].Value.ToString());
+                frmContrato.dtpFechaInicio.Value = Convert.ToDateTime(dtContratos.CurrentRow.Cells[1].Value);
+                frmContrato.dtpFechaFin.Value = Convert.ToDateTime(dtContratos.CurrentRow.Cells[2].Value);
                 frmContrato.txtCargo.Text = dtContratos.CurrentRow.Cells[3].Value.ToString();
                 objContrato.AsignacionFamiliar = dtContratos.CurrentRow.Cells[4].Value.ToString();
                 if (objContrato.AsignacionFamiliar == "Si")
@@ -160,8 +160,8 @@ namespace CapaPresentacion
                 frmContrato.ListarAFP();
                 frmContrato.nbTotalHoras.Value = Convert.ToDecimal(dtContratos.CurrentRow.Cells[6].Value.ToString());
                 frmContrato.nbValorHora.Value = Convert.ToDecimal(dtContratos.CurrentRow.Cells[7].Value.ToString());
-                frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado1;
-                frmContrato.GradoAcademico = objEmpleado.GradoAcademico1;
+                frmContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado;
+                frmContrato.GradoAcademico = objEmpleado.GradoAcademico;
                 //Abrir Formulario
                 frmContrato.ShowDialog();
                 MostrarContratoEmpleado(objContrato);

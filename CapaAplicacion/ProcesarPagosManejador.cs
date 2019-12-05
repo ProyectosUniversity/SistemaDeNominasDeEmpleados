@@ -8,15 +8,21 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 //Referencia a CapaDominio
-using CapaPersistencia;
 using CapaDominio;
+using CapaPersistencia;
 
 namespace CapaAplicacion
 {
-    public class GestionarBoletaManejador
+    public class ProcesarPagosManejador
     {
+        PeriodoDAO objPeriodoDAO = new PeriodoDAO();
         BoletaDAO objBoletaDAO = new BoletaDAO();
 
+        //Listar Periodos
+        public DataTable listarPeriodo()
+        {
+            return objPeriodoDAO.ListarPeriodo();
+        }
         //ListarBoletas
         public DataTable listarBoletas(Periodo objPeriodo)
         {

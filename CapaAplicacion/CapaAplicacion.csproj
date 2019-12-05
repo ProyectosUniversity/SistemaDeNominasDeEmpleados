@@ -41,12 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GestionarAFPManejador.cs" />
-    <Compile Include="GestionarBoletaManejador.cs" />
     <Compile Include="GestionarContratoManejador.cs" />
-    <Compile Include="GestionarEmpleadoManejador.cs" />
-    <Compile Include="GestionarPeriodoManejador.cs" />
-    <Compile Include="GrestionarConceptoDePagoManejador.cs" />
+    <Compile Include="ProcesarPagosManejador.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

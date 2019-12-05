@@ -16,6 +16,23 @@ namespace CapaAplicacion
     public class GestionarContratoManejador
     {
         ContratoDAO objContratoDAO = new ContratoDAO();
+        AfpDAO objAfpDAO = new AfpDAO();
+        
+        EmpleadoDAO objEmpleadoDAO = new EmpleadoDAO();
+
+        //Metodo BuscarEmpleado
+
+        public bool BuscarEmpleado(Empleado objEmpleado)
+        {
+            return objEmpleadoDAO.BuscarEmpleado(objEmpleado);
+        }
+
+
+        //Metodo ListarAFP
+        public DataTable ListarAFP()
+        {
+            return objAfpDAO.ListarAFP();
+        }
 
         //Mostrar Contrato Empleado
         public DataTable MostrarContratoEmpleado(Contrato objContrato)

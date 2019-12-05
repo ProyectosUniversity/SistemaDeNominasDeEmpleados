@@ -107,25 +107,25 @@ namespace CapaDominio
 
         public bool determinarValorHora(Empleado objEmpleado)
         {
-            if (objEmpleado.GradoAcademico1 == "primaria" || objEmpleado.GradoAcademico1 == "secundaria")
+            if (objEmpleado.GradoAcademico == "primaria" || objEmpleado.GradoAcademico == "secundaria")
             {
                 return ValorHora >= 5 &&
                     ValorHora <= 10;
 
             }
-            else if (objEmpleado.GradoAcademico1 == "bachiller")
+            else if (objEmpleado.GradoAcademico == "bachiller")
             {
                 return ValorHora >= 11 && ValorHora <= 20;
             }
-            else if (objEmpleado.GradoAcademico1 == "profesional")
+            else if (objEmpleado.GradoAcademico == "profesional")
             {
                 return ValorHora >= 21 && ValorHora <= 30;
             }
-            else if (objEmpleado.GradoAcademico1 == "magister")
+            else if (objEmpleado.GradoAcademico == "magister")
             {
                 return ValorHora >= 31 && ValorHora <= 40;
             }
-            else if (objEmpleado.GradoAcademico1 == "doctor")
+            else if (objEmpleado.GradoAcademico == "doctor")
             {
                 return ValorHora >= 41 && ValorHora <= 60;
             }

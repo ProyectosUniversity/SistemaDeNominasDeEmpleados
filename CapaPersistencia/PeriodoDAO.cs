@@ -16,6 +16,7 @@ namespace CapaPersistencia
     {
         SqlDataReader leer;
         DataTable tabla = new DataTable();
+        //Periodo objPeriodo = new Periodo();
         public DataTable ListarPeriodo()
         {
             using (var conexion = GetConnection())
@@ -24,7 +25,7 @@ namespace CapaPersistencia
                 using (var cmd = new SqlCommand())
                 {
                     cmd.Connection = conexion;
-                    cmd.CommandText = "Contratos.MostrarPeriodo";
+                    cmd.CommandText = "Contratos.spMostrarPeriodoActivo";
                     cmd.CommandType = CommandType.StoredProcedure;
                     leer = cmd.ExecuteReader();
                     tabla.Load(leer);
@@ -35,7 +36,6 @@ namespace CapaPersistencia
                 }
             }
         }
-
 
     }
 }
