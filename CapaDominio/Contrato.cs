@@ -21,9 +21,9 @@ namespace CapaDominio
         private double valorHora;
         private string estado;
         private double PorcentajeDeDescuento;
-        private string codigoPeriodo;
-        private string codigoEmpleado;
-        private string codigoAFP;
+        private string Periodo;
+        private string Empleado;
+        private string AFP;
 
 
         //Campos Encapsulados
@@ -35,10 +35,10 @@ namespace CapaDominio
         public double TotalDeHorasContratadasPorSemanas { get => totalDeHorasContratadasPorSemanas; set => totalDeHorasContratadasPorSemanas = value; }
         public double ValorHora { get => valorHora; set => valorHora = value; }
         public string Estado { get => estado; set => estado = value; }
-        public string CodigoPeriodo { get => codigoPeriodo; set => codigoPeriodo = value; }
-        public string CodigoEmpleado { get => codigoEmpleado; set => codigoEmpleado = value; }
-        public string CodigoAFP { get => codigoAFP; set => codigoAFP = value; }
         public double PorcentajeDeDescuento1 { get => PorcentajeDeDescuento; set => PorcentajeDeDescuento = value; }
+        public string Periodo1 { get => Periodo; set => Periodo = value; }
+        public string Empleado1 { get => Empleado; set => Empleado = value; }
+        public string AFP1 { get => AFP; set => AFP = value; }
 
 
 

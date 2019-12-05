@@ -11,33 +11,7 @@ namespace CapaDominio.Tests
     [TestClass()]
     public class BoletaTests
     {
-        //Pruebas Unitarias del metodo elPeriodoEstaActivo()
-
-        //Complejidad Ciclomatica = 2
-        [TestMethod()]
-        public void elPeriodoEstaActivoTest1()
-        {
-            Boleta objBoleta = new Boleta();
-            Contrato objContrato = new Contrato();
-            DateTime fechaActual = DateTime.Now;
-            objContrato.FechaFin = DateTime.Parse("2019-11-15");
-            bool resultadoEsperado = true;
-            bool estaActivo = objBoleta.elPeriodoEstaActivo(objContrato);
-            Assert.AreEqual(estaActivo, resultadoEsperado);
-        }
-
-        [TestMethod()]
-        public void elPeriodoEstaActivoTest2()
-        {
-            Boleta objBoleta = new Boleta();
-            Contrato objContrato = new Contrato();
-            DateTime fechaActual = DateTime.Now;
-            objContrato.FechaFin = DateTime.Parse("2019-12-20");
-            bool resultadoEsperado = false;
-            bool estaActivo = objBoleta.elPeriodoEstaActivo(objContrato);
-            Assert.AreEqual(estaActivo, resultadoEsperado);
-        }
-
+        
         //Pruebas Unitarias del metodo calcularSueldoBasico()
 
         //Complejidad Ciclomatica = 1

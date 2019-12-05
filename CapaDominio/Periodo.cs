@@ -19,5 +19,19 @@ namespace CapaDominio
         public DateTime FechaInicio { get => fechaInicio; set => fechaInicio = value; }
         public DateTime FechaFin { get => fechaFin; set => fechaFin = value; }
         public bool Estado { get => estado; set => estado = value; }
+
+        //Regla 01
+        public bool elPeriodoEstaActivo(Contrato objContrato)
+        {
+            DateTime fechaActual = DateTime.Now;
+            if (fechaActual >= objContrato.FechaFin)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

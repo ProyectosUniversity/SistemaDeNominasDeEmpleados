@@ -28,7 +28,7 @@ namespace CapaPersistencia
                     cmd.CommandText = "Contratos.spMostrarContrato";
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.CodigoEmpleado);
+                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.Empleado1);
                     leer = cmd.ExecuteReader();
                     tabla.Load(leer);
 
@@ -57,9 +57,9 @@ namespace CapaPersistencia
                     cmd.Parameters.AddWithValue("@TotalDeHorasContratadasPorSemanas", objContrato.TotalDeHorasContratadasPorSemanas);
                     cmd.Parameters.AddWithValue("@ValorHora", objContrato.ValorHora);
                     cmd.Parameters.AddWithValue("@Estado", objContrato.Estado);
-                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.CodigoEmpleado);
-                    cmd.Parameters.AddWithValue("@CodigoAFP", objContrato.CodigoAFP);
-                    cmd.Parameters.AddWithValue("@CodigoPeriodo", objContrato.CodigoPeriodo);
+                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.Empleado1);
+                    cmd.Parameters.AddWithValue("@CodigoAFP", objContrato.AFP1);
+                    cmd.Parameters.AddWithValue("@CodigoPeriodo", objContrato.Periodo1);
                     cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
 
@@ -86,9 +86,9 @@ namespace CapaPersistencia
                     cmd.Parameters.AddWithValue("@TotalDeHorasContratadasPorSemanas", objContrato.TotalDeHorasContratadasPorSemanas);
                     cmd.Parameters.AddWithValue("@ValorHora", objContrato.ValorHora);
                     cmd.Parameters.AddWithValue("@Estado", objContrato.Estado);
-                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.CodigoEmpleado);
-                    cmd.Parameters.AddWithValue("@CodigoAFP", objContrato.CodigoAFP);
-                    cmd.Parameters.AddWithValue("@CodigoPeriodo", objContrato.CodigoPeriodo);
+                    cmd.Parameters.AddWithValue("@CodigoEmpleado", objContrato.Empleado1);
+                    cmd.Parameters.AddWithValue("@CodigoAFP", objContrato.AFP1);
+                    cmd.Parameters.AddWithValue("@CodigoPeriodo", objContrato.Periodo1);
                     cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
 

@@ -39,7 +39,7 @@ namespace CapaPresentacion
                 if (validarCajaTexto == true)
                 {
                     txtBuscarEmpleado.Clear();
-                    objContrato.CodigoEmpleado = objEmpleado.CodigoEmpleado;
+                    objContrato.Empleado1 = objEmpleado.CodigoEmpleado;
                     lbNombre.Text = objEmpleado.Nombre;
                     lbDireccion.Text = objEmpleado.Direccion;
                     lbTelefono.Text = objEmpleado.Telefono;

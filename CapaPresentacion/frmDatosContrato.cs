@@ -63,18 +63,25 @@ namespace CapaPresentacion
                     objContrato.TotalDeHorasContratadasPorSemanas = Convert.ToDouble(nbTotalHoras.Value);
                     objContrato.ValorHora = Convert.ToDouble(nbValorHora.Value);
                     objContrato.Estado = "Vigente";
-                    objContrato.CodigoEmpleado = CodigoEmpleado;
-                    objContrato.CodigoAFP = Convert.ToString(cmbAFP.SelectedValue);
-                    objContrato.CodigoPeriodo = "1";
+                    objContrato.Empleado1 = CodigoEmpleado;
+                    objContrato.AFP1 = Convert.ToString(cmbAFP.SelectedValue);
+                    objContrato.Periodo1 = "1";
 
                     objEmpleado.GradoAcademico = GradoAcademico;
 
                     var regla03 = objContrato.determinarFechaFin();
                     var regla04 = objContrato.determinarTotalDeHorasContratadasPorSemana();
                     var regla05 = objContrato.determinarValorHora(objEmpleado);
-                    objGestionarContratoManejador.CrearContrato(objContrato);
-                    MessageBox.Show("Se guardo el nuevo contrato");
-                    this.Close();
+                    if (regla03 == true && regla04 == true && regla05 == true)
+                    {
+                        objGestionarContratoManejador.CrearContrato(objContrato);
+                        MessageBox.Show("Se guardo el nuevo contrato");
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo crear el contrato");
+                    }
 
                 }
                 catch (Exception ex)
@@ -100,10 +107,10 @@ namespace CapaPresentacion
                     }
                     objContrato.TotalDeHorasContratadasPorSemanas = Convert.ToDouble(nbTotalHoras.Value);
                     objContrato.ValorHora = Convert.ToDouble(nbValorHora.Value);
-                    objContrato.CodigoAFP = Convert.ToString(cmbAFP.SelectedValue);
+                    objContrato.AFP1 = Convert.ToString(cmbAFP.SelectedValue);
                     objContrato.Estado = "Vigente";
-                    objContrato.CodigoEmpleado = CodigoEmpleado;
-                    objContrato.CodigoPeriodo = "1";
+                    objContrato.Empleado1 = CodigoEmpleado;
+                    objContrato.Periodo1 = "1";
 
                     objEmpleado.GradoAcademico = GradoAcademico;
 
@@ -111,10 +118,17 @@ namespace CapaPresentacion
                     var regla04 = objContrato.determinarTotalDeHorasContratadasPorSemana();
                     var regla05 = objContrato.determinarValorHora(objEmpleado);
 
-                    objGestionarContratoManejador.EditarContrato(objContrato);
-                    MessageBox.Show("Se guardó las modificaciones del contrato");
-                    this.Close();
-                    
+                    if (regla03 == true && regla04 == true && regla05 == true)
+                    {
+                        objGestionarContratoManejador.EditarContrato(objContrato);
+                        MessageBox.Show("Se guardó las modificaciones del contrato");
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudieron guardar las modificaciones del contrato");
+                    }
+
                 }
                 catch (Exception ex)
                 {

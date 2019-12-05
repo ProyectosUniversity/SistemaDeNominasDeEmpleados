@@ -59,6 +59,7 @@
     <Compile Include="BoletaTests.cs" />
     <Compile Include="ConceptoDePagoTests.cs" />
     <Compile Include="ContratoTests.cs" />
+    <Compile Include="PeriodoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -18,9 +18,9 @@ namespace CapaDominio
         double totalDeDescuentos;
         double sueldoNeto;
         double totalDeHoras;
-        string codigoConceptoPago;
-        string codigoPeriodo;
-        string codigoContrato;
+        string ConceptoDePago;
+        string Periodo;
+        string Contrato;
 
         //Campos Encapsulados
         public string CodigoBoleta { get => codigoBoleta; set => codigoBoleta = value; }
@@ -32,25 +32,12 @@ namespace CapaDominio
         public double TotalDeDescuentos { get => totalDeDescuentos; set => totalDeDescuentos = value; }
         public double SueldoNeto { get => sueldoNeto; set => sueldoNeto = value; }
         public double TotalDeHoras { get => totalDeHoras; set => totalDeHoras = value; }
-        public string CodigoConceptoPago { get => codigoConceptoPago; set => codigoConceptoPago = value; }
-        public string CodigoPeriodo { get => codigoPeriodo; set => codigoPeriodo = value; }
-        public string CodigoContrato { get => codigoContrato; set => codigoContrato = value; }
+        public string ConceptoDePago1 { get => ConceptoDePago; set => ConceptoDePago = value; }
+        public string Periodo1 { get => Periodo; set => Periodo = value; }
+        public string Contrato1 { get => Contrato; set => Contrato = value; }
+
 
         //REGLAS DE NEGOCIO
-
-        //Regla 01
-        public bool elPeriodoEstaActivo(Contrato objContrato)
-        {
-            DateTime fechaActual = DateTime.Now;
-            if (fechaActual >= objContrato.FechaFin)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         //Regla 02
         public double calcularSueldoBasico(Contrato objContrato)

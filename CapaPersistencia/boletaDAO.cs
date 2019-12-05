@@ -67,9 +67,9 @@ namespace CapaPersistencia
                         itemDetalle.TotalDeDescuentos,
                         itemDetalle.SueldoNeto,
                         itemDetalle.TotalDeHoras,
-                        itemDetalle.CodigoContrato,
-                        itemDetalle.CodigoPeriodo,
-                        itemDetalle.CodigoConceptoPago,
+                        itemDetalle.Contrato1,
+                        itemDetalle.Periodo1,
+                        itemDetalle.ConceptoDePago1,
                     });
             }
 

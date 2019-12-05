@@ -103,9 +103,10 @@
             this.cProgressBar.OuterWidth = 26;
             this.cProgressBar.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(182)))));
             this.cProgressBar.ProgressWidth = 25;
-            this.cProgressBar.SecondaryFont = new System.Drawing.Font("Microsoft Sans Serif", 36F);
+            this.cProgressBar.SecondaryFont = new System.Drawing.Font("Microsoft Sans Serif", 18F);
             this.cProgressBar.Size = new System.Drawing.Size(179, 172);
             this.cProgressBar.StartAngle = 270;
+            this.cProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.cProgressBar.SubscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
             this.cProgressBar.SubscriptMargin = new System.Windows.Forms.Padding(10, -35, 0, 0);
             this.cProgressBar.SubscriptText = "";

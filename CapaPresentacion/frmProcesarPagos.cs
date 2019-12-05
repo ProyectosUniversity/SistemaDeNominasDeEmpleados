@@ -97,7 +97,7 @@ namespace CapaPresentacion
                 //Añadimos los datos calculados a una lista local
                 lista.Rows.Add(new object[]
                 {
-                  dato.CodigoEmpleado,
+                  dato.Empleado1,
                   objBoleta.TotalDeHoras,
                   dato.ValorHora,
                   objBoleta.SueldoBasico,
@@ -128,7 +128,7 @@ namespace CapaPresentacion
                     PorcentajeDeDescuento1= Convert.ToDouble(fila.Cells[6].Value),
                     TotalDeHorasContratadasPorSemanas = Convert.ToDouble(fila.Cells[7].Value),
                     ValorHora = Convert.ToDouble(fila.Cells[8].Value),
-                    CodigoEmpleado = Convert.ToString(fila.Cells[9].Value)
+                    Empleado1 = Convert.ToString(fila.Cells[9].Value)
                 };
                 datosContrato.Add(objcontrato);
 
