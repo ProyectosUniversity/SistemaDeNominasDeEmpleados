@@ -255,7 +255,7 @@
             this.Controls.Add(this.dtpFechaInicio);
             this.Controls.Add(this.txtCargo);
             this.Name = "frmDatosContrato";
-            this.Text = "frmContrato";
+            this.Text = "..";
             ((System.ComponentModel.ISupportInitialize)(this.nbTotalHoras)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbValorHora)).EndInit();
             this.ResumeLayout(false);

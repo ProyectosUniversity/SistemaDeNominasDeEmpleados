@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-//Referencia a CapaDominio
+//Referencia a Capas
 using CapaDominio;
 using CapaPersistencia;
 

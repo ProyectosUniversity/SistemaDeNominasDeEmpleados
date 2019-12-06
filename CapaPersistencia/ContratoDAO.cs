@@ -17,6 +17,7 @@ namespace CapaPersistencia
         SqlDataReader leer;
         DataTable tabla = new DataTable();
 
+        //Mostrar Contrato del Empleado
         public DataTable MostrarContratoEmpleado(Contrato objContrato)
         {
             using (var conexion = GetConnection())

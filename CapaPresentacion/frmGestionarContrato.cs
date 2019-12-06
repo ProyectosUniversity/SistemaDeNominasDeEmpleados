@@ -47,6 +47,7 @@ namespace CapaPresentacion
                     lbEstadoCivil.Text = objEmpleado.EstadoCivil;
                     lbGradoAcademico.Text = objEmpleado.GradoAcademico;
 
+                    //Mostrar Datos del Contrato
                     MostrarContratoEmpleado(objContrato);
                     //Habilitar opciones
                     btnCrearContrato.Enabled = true;
@@ -71,6 +72,7 @@ namespace CapaPresentacion
             //Mostrar Datos del Contrato
             GestionarContratoManejador objGestionarContrato = new GestionarContratoManejador();
             dtContratos.DataSource = objGestionarContrato.MostrarContratoEmpleado(objContrato);
+            //Ocultar Columnas
             dtContratos.Columns[0].Visible = false;
             dtContratos.Columns[8].Visible = false;
 
@@ -193,6 +195,9 @@ namespace CapaPresentacion
             }
         }
 
-        
+        private void dtContratos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

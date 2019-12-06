@@ -26,7 +26,7 @@ namespace CapaAplicacion
         //ListarBoletas
         public DataTable listarBoletas(Periodo objPeriodo)
         {
-            return objBoletaDAO.ListarBoletas(objPeriodo);
+            return objBoletaDAO.MostrarContratosDelPeriodo(objPeriodo);
         }
 
         //InsertarBoletas

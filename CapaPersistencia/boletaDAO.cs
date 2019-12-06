@@ -16,7 +16,7 @@ namespace CapaPersistencia
         DataTable tabla = new DataTable();
 
         //Mostrar Contratos de las Boletas
-        public DataTable ListarBoletas(Periodo objPeriodo)
+        public DataTable MostrarContratosDelPeriodo(Periodo objPeriodo)
         {
             using (var conexion = GetConnection())
             {

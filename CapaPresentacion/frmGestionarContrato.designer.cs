@@ -157,12 +157,13 @@
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Violet;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DodgerBlue;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
             this.dtContratos.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dtContratos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dtContratos.Size = new System.Drawing.Size(833, 314);
             this.dtContratos.TabIndex = 14;
+            this.dtContratos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtContratos_CellContentClick);
             // 
             // lbNombre
             // 

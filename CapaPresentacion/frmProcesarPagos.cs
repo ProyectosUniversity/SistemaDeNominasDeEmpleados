@@ -136,6 +136,9 @@ namespace CapaPresentacion
             ProcesarDatosDelContrato(datosContrato);
         }
 
+        private void dtFechas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
     }
 }
